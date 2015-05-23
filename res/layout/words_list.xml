@@ -5,17 +5,15 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal" >
 
-   
-    <Button 
-        android:id="@+id/shuaxin"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="刷新生词本"
-        />
-    <ListView
-        android:id="@+id/listview_words"
+    <TextView
+        android:id="@+id/word_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
-    </ListView>
+    </TextView>
+    <TextView
+        android:id="@+id/word_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    </TextView>
 
 </LinearLayout>

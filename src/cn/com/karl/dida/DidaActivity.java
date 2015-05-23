@@ -12,12 +12,15 @@ import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import cn.com.karl.dida.R.id;
 
 import com.android.volley.RequestQueue;
@@ -34,6 +38,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.yayun.demo.MyDatabaseHelper;
 
 public class DidaActivity extends Activity {
 
@@ -55,6 +60,7 @@ public class DidaActivity extends Activity {
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 	public static StringBuffer sb = new StringBuffer();
 	private ProgressDialog mProgressDialog;
+	MyDatabaseHelper myDatabaseHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,7 @@ public class DidaActivity extends Activity {
 		btn_search=(Button)findViewById(R.id.btn_search);
 		text_word=(TextView)findViewById(R.id.text_word);
 		mProgressDialog=new ProgressDialog(this);
+		myDatabaseHelper=new MyDatabaseHelper(this, "Words.db", null, 1);
 
 		
 
@@ -77,67 +84,87 @@ public class DidaActivity extends Activity {
 		mQueue = Volley.newRequestQueue(DidaActivity.this);
 		btn_search.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				mProgressDialog.show();
-				string = editText.getText().toString();
-				String requestUrl = getRequestUrl(string);
-				stringRequest = new StringRequest(requestUrl,
-						new Response.Listener<String>() {
-							public void onResponse(String response) {
+				if(CheckNet()){
+				
+				
+				string = editText.getText().toString().trim();
+				if(TextUtils.isEmpty(string)){
+					Toast.makeText(DidaActivity.this, "请输入不为空的单词！", Toast.LENGTH_SHORT).show();
+				}else {
+					//数据库操作
+					SQLiteDatabase db=myDatabaseHelper.getWritableDatabase();
+					ContentValues contentValues=new ContentValues();
+					contentValues.put("name",string);
+					db.insert("Word", null, contentValues);
+					mProgressDialog.show();
+					String requestUrl = getRequestUrl(string);
+					stringRequest = new StringRequest(requestUrl,
+							new Response.Listener<String>() {
+								public void onResponse(String response) {
 
-								Log.d("TAG", response);
-								System.out.println("response=" + response);
-								Status1 status = gson.fromJson(response,
-										Status1.class);
-								StringBuffer buffer = new StringBuffer();// 保存所用字符串
-								int returnCode=status.getErrNum();
-								if(returnCode==0){
-								RetData2 retData2 = status.getRetData();// 第二个对象的获取
+									Log.d("TAG", response);
+									System.out.println("response=" + response);
+									Status1 status = gson.fromJson(response,
+											Status1.class);
+									StringBuffer buffer = new StringBuffer();// 保存所用字符串
+									int returnCode=status.getErrNum();
+									if(returnCode==0){
+									RetData2 retData2 = status.getRetData();// 第二个对象的获取
 
-								System.out.println("from=" + retData2.getFrom());
-								DictResult3 dictResult3;
-								dictResult3 = retData2.getDictResult();// 第三个对象的获取
-								buffer.append("单词："
-										+ dictResult3.getWord_name() + "\n");
-								System.out.println("word_name="
-										+ dictResult3.getWord_name());
-								List<Symbols4> symbols4s = dictResult3
-										.getSymbols();// 第四个是对象数组哦，获取对象数组
-								buffer.append("音标"
-										+ symbols4s.get(0).getPh_en() + "\n");// symbols4s.get(0)用于获取第一个对象
-								List<Parts> parts = symbols4s.get(0).getParts();// 同理，最后一个也是对象数组
-								for (int i = 0; i < parts.size(); i++) {
-									buffer.append("part:"
-											+ parts.get(i).getParts()// parts.get(i)获取对象List中的各个对象
-											+ "\n");
-									buffer.append("词义：");
-									for (int j = 0; j < parts.get(i).getMeans().length; j++) {
-										String[] aStrings = parts.get(i)
-												.getMeans();
-										buffer.append(aStrings[j]);
+									System.out.println("from=" + retData2.getFrom());
+									DictResult3 dictResult3;
+									dictResult3 = retData2.getDictResult();// 第三个对象的获取
+									buffer.append("单词："
+											+ dictResult3.getWord_name() + "\n");
+									System.out.println("word_name="
+											+ dictResult3.getWord_name());
+									List<Symbols4> symbols4s = dictResult3
+											.getSymbols();// 第四个是对象数组哦，获取对象数组
+									buffer.append("音标"
+											+ symbols4s.get(0).getPh_en() + "\n");// symbols4s.get(0)用于获取第一个对象
+									List<Parts> parts = symbols4s.get(0).getParts();// 同理，最后一个也是对象数组
+									for (int i = 0; i < parts.size(); i++) {
+										buffer.append("part:"
+												+ parts.get(i).getParts()// parts.get(i)获取对象List中的各个对象
+												+ "\n");
+										buffer.append("词义：");
+										for (int j = 0; j < parts.get(i).getMeans().length; j++) {
+											String[] aStrings = parts.get(i)
+													.getMeans();
+											buffer.append(aStrings[j]);
+										}
+										buffer.append("\n");
 									}
-									buffer.append("\n");
-								}
 
-								text_word.setText(buffer);
-								mProgressDialog.dismiss();
-								}
-								else {
-									text_word.setText("查询失败!请检查网络，或改正输入单词。");
+									text_word.setText(buffer);
 									mProgressDialog.dismiss();
+									}
+									else {
+										mProgressDialog.dismiss();
+										text_word.setText("查询失败，请输入正确的单词！");
+										mProgressDialog.dismiss();
+									}
+
+									
+
+								}
+							}, new Response.ErrorListener() {
+								public void onErrorResponse(VolleyError error) {
+									Log.e("TAG", error.getMessage(), error);
 								}
 
-								
-
-							}
-						}, new Response.ErrorListener() {
-							public void onErrorResponse(VolleyError error) {
-								Log.e("TAG", error.getMessage(), error);
-							}
-
-						});
-				mQueue.add(stringRequest);
+							});
+					mQueue.add(stringRequest);
+					
+				}
+				
+			}else{
+				mProgressDialog.dismiss();
+				Toast.makeText(DidaActivity.this, "检查网络连接！", Toast.LENGTH_LONG).show();
+			}
 			}
 		});
+		
 
 	}
 

@@ -44,7 +44,7 @@
         </Button>
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/llayout1"
@@ -61,6 +61,6 @@
 
           
         
-    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

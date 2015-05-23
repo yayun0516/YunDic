@@ -1,8 +1,25 @@
 package cn.com.karl.dida;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 
+import org.lxh.demo.DictResult3;
+import org.lxh.demo.Parts;
+import org.lxh.demo.RetData2;
+import org.lxh.demo.Status1;
+import org.lxh.demo.Symbols4;
+import org.lxh.demo.Translate;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -13,6 +30,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,19 +51,88 @@ public class TransActivity extends Activity implements OnClickListener {
 	private static Boolean isTrue = false;
 	private static final int VOICE_RECOGNITION_REQUEST_CODE = 12345;
 	Matcher m = null;
-
-	
+	RequestQueue mQueue;
+	Gson gson;
+	String string;
+	StringRequest stringRequest;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.trans);
+		btn_type = (ImageButton) findViewById(R.id.btn_type);
+		btn_tran = (Button) findViewById(R.id.btn_tran);
+		btn_voice = (Button) findViewById(R.id.btn_voice);
+		et_value = (EditText) findViewById(R.id.et_value);
+		et_result = (EditText) findViewById(R.id.et_result);
+		mProgressDialog = new ProgressDialog(this);
+		gson = new Gson();
+		mQueue = Volley.newRequestQueue(TransActivity.this);
+		btn_tran.setOnClickListener(new OnClickListener() {
 
+			public void onClick(View v) {
+				string = et_value.getText().toString().trim();
+				if(CheckNet()){
+					if(!TextUtils.isEmpty(string)){
+				mProgressDialog.show();
+				String requestUrl = getRequestUrl(string);
+				stringRequest = new StringRequest(requestUrl,
+						new Response.Listener<String>() {
+							public void onResponse(String response) {
+								
+								System.out.println(response);
+								Translate translate = gson.fromJson(response,
+										Translate.class);
+								StringBuffer buffer = new StringBuffer();// 保存所用字符串
+								int returnCode = translate.getErrorCode();
+								if (returnCode == 0) {
+									for (String string : translate
+											.getTranslation()) {
+										buffer.append(string);
+										buffer.append("\n");
+									}
+								} else {
+									Toast.makeText(TransActivity.this, "搜索有误！",
+											Toast.LENGTH_SHORT).show();
+									mProgressDialog.dismiss();
+								}
+								et_result.setText(buffer);
+								mProgressDialog.dismiss();
+							}
+						
+				}, new Response.ErrorListener() {
+							public void onErrorResponse(VolleyError error) {
+								Log.e("TAG", error.getMessage(), error);
+							}
+
+						});
+				mQueue.add(stringRequest);
+				
+					}else {
+						Toast.makeText(TransActivity.this, "输入不能为空！",
+								Toast.LENGTH_SHORT).show();
+						mProgressDialog.dismiss();
+					}
+				}else {
+					Toast.makeText(TransActivity.this, "请检查网络！",
+							Toast.LENGTH_SHORT).show();
+					mProgressDialog.dismiss();
+				}
+			}
+		});
 		
 	}
-
-	
+	private String getRequestUrl(String word) {
+		String url = null;
+		if (word != null) {
+			url = "http://fanyi.youdao.com/openapi.do?keyfrom=dfsfafasfsaddfsaf&key"//申请有道API
+					+ "=814165254&type=data&doctype=json&version=1.1"
+					+ "&q="
+					+ java.net.URLEncoder.encode(word);// 将汉字转变成URLEncoder格式，不然返回的字符串将是乱码。
+		}
+		return url;
+	}
 
 	/**
 	 * 查询网络是否连接
@@ -61,66 +149,6 @@ public class TransActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	
-
-
-	private void voice() {
-		try {
-			// 通过Intent传递语音识别的模式，开启语音
-			Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-			// 语言模式和自由模式的语音识别
-			intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-					RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-			// 提示语音开始
-			intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "开始语音");
-			// 开始语音识别
-			startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			Toast.makeText(getApplicationContext(), "找不到语音设备", 1).show();
-		}
-
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		// 回调获取从谷歌得到的数据
-		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE
-				&& resultCode == RESULT_OK) {
-			// 取得语音的字符
-			ArrayList<String> results = data
-					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
-			String resultString = "";
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < results.size(); i++) {
-
-				sb.append(results.get(i)).append(",");
-
-			}
-			String str = sb.substring(0, sb.lastIndexOf(","));
-			final String[] items = str.split(",");
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("请选择");
-			builder.setItems(items, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int item) {
-					// Toast.makeText(getApplicationContext(), items[item],
-					// Toast.LENGTH_SHORT).show();
-					et_value.setText(items[item]);
-				}
-			});
-			AlertDialog alert = builder.create();
-			alert.show();
-
-			// Toast.makeText(this, items.toString(), 1).show();
-		}
-
-	}
-	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
@@ -129,7 +157,7 @@ public class TransActivity extends Activity implements OnClickListener {
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(
 					TransActivity.this);
-			//builder.setIcon(R.drawable.bee);
+			// builder.setIcon(R.drawable.bee);
 			builder.setTitle("你确定退出吗？");
 			builder.setPositiveButton("确定",
 					new DialogInterface.OnClickListener() {
@@ -158,10 +186,8 @@ public class TransActivity extends Activity implements OnClickListener {
 		return super.onKeyDown(keyCode, event);
 	}
 
-
-
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
