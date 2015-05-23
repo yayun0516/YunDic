@@ -3,11 +3,12 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="C:/Users/Administrator/Desktop/android-support-v4.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/Administrator/Desktop/gson-2.2.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/Administrator/Desktop/volley.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Administrator/Desktop/jackson-all-1.9.2.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Administrator/Desktop/jar/android-support-v4.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Administrator/Desktop/jar/gson-2.2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Administrator/Desktop/jar/jackson-all-1.9.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Administrator/Desktop/jar/volley.jar"/>
+	<classpathentry kind="src" path="/BaseAdapterDemo"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
