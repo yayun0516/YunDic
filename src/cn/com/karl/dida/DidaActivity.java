@@ -148,8 +148,9 @@ public class DidaActivity extends Activity {
 											+ dictResult3.getWord_name());
 									List<Symbols4> symbols4s = dictResult3
 											.getSymbols();// 第四个是对象数组哦，获取对象数组
-									buffer.append("音标"
-											+ symbols4s.get(0).getPh_en() + "\n");// symbols4s.get(0)用于获取第一个对象
+									buffer.append("音标["
+											+ symbols4s.get(0).getPh_en()
+											+ "]"+"\n");// symbols4s.get(0)用于获取第一个对象
 									List<Parts> parts = symbols4s.get(0).getParts();// 同理，最后一个也是对象数组
 									for (int i = 0; i < parts.size(); i++) {
 										buffer.append("part:"

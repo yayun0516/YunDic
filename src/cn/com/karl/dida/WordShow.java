@@ -9,6 +9,7 @@ import org.lxh.demo.Status1;
 import org.lxh.demo.Symbols4;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -16,6 +17,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,6 +31,7 @@ public class WordShow extends Activity {
 	RequestQueue mQueue;
 	StringRequest stringRequest;
 	Gson gson;
+	ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +42,11 @@ public class WordShow extends Activity {
 		String word = intent.getStringExtra("word");
 		Log.d("word", word);
 		gson = new Gson();
+		progressDialog=new ProgressDialog(this);
 		mQueue = Volley.newRequestQueue(WordShow.this);
 		
 				if (CheckNet()) {
+					progressDialog.show();
 
 					String requestUrl = getRequestUrl(word);
 					stringRequest = new StringRequest(requestUrl,
@@ -68,9 +73,9 @@ public class WordShow extends Activity {
 												+ dictResult3.getWord_name());
 										List<Symbols4> symbols4s = dictResult3
 												.getSymbols();// 第四个是对象数组哦，获取对象数组
-										buffer.append("音标"
+										buffer.append("音标["
 												+ symbols4s.get(0).getPh_en()
-												+ "\n");// symbols4s.get(0)用于获取第一个对象
+												+ "]"+"\n");// symbols4s.get(0)用于获取第一个对象
 										List<Parts> parts = symbols4s.get(0)
 												.getParts();// 同理，最后一个也是对象数组
 										for (int i = 0; i < parts.size(); i++) {
@@ -88,6 +93,7 @@ public class WordShow extends Activity {
 										}
 
 										WordShow.this.textView.setText(buffer);
+										progressDialog.dismiss();
 
 									}
 
@@ -100,6 +106,10 @@ public class WordShow extends Activity {
 							});
 					mQueue.add(stringRequest);
 
+				}
+				else{
+					Toast.makeText(this, "检查网络！", Toast.LENGTH_SHORT);
+					progressDialog.dismiss();
 				}
 
 			}
