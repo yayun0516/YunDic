@@ -34,6 +34,9 @@
          <activity android:name=".RegisterActivity"/>
           <activity android:name=".SendMailActivity"/>
            <activity android:name=".TestsActivity"/>
+           <activity android:name=".WordShow"
+               android:theme="@android:style/Theme.Dialog"/>
+           
     </application>
     
 <uses-permission android:name="android.permission.INTERNET" /> 

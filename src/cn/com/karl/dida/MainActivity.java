@@ -40,9 +40,7 @@ public class MainActivity extends TabActivity {
 		spec = tabHost.newTabSpec("´Êµä").setIndicator("´Êµä").setContent(intent);
 		tabHost.addTab(spec);
 
-		intent = new Intent().setClass(this, WordsBookActivity.class);
-		spec = tabHost.newTabSpec("Éú´Ê").setIndicator("Éú´Ê").setContent(intent);
-		tabHost.addTab(spec);
+		
 
 		intent = new Intent().setClass(this, TransActivity.class);
 		spec = tabHost.newTabSpec("·­Òë").setIndicator("·­Òë").setContent(intent);
@@ -65,10 +63,7 @@ public class MainActivity extends TabActivity {
 				case R.id.radio_button0:// ´Êµä
 					tabHost.setCurrentTabByTag("´Êµä");
 					break;
-				case R.id.radio_button1:// Éú´Ê
-					tabHost.setCurrentTabByTag("Éú´Ê");
-
-					break;
+				
 				case R.id.radio_button2:// ·­Òë
 					tabHost.setCurrentTabByTag("·­Òë");
 					break;

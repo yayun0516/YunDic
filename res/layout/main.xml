@@ -42,13 +42,7 @@
                 style="@style/main_tab_bottom"
                 android:text="词典" />
 
-            <RadioButton
-                android:id="@+id/radio_button1"
-                android:layout_marginTop="2.0dip"
-                android:drawableTop="@drawable/menu_book"
-                android:tag="radio_button1"
-                style="@style/main_tab_bottom"
-                android:text="生词" />
+            
 
             <RadioButton
                 android:id="@+id/radio_button2"

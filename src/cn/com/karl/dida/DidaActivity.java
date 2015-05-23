@@ -1,5 +1,6 @@
 package cn.com.karl.dida;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.lxh.demo.DictResult3;
@@ -15,6 +16,8 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
@@ -46,6 +49,7 @@ public class DidaActivity extends Activity {
 	private EditText editText; // 编辑单词
 	private Button btn_search; // 搜索单词
 	private TextView text_word;
+	private ImageButton wordButton;
 	RequestQueue mQueue;
 	StringRequest stringRequest;
 	Gson gson;
@@ -61,12 +65,21 @@ public class DidaActivity extends Activity {
 	public static StringBuffer sb = new StringBuffer();
 	private ProgressDialog mProgressDialog;
 	MyDatabaseHelper myDatabaseHelper;
+	List<String> listdata;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dida);
+		wordButton=(ImageButton)findViewById(R.id.btn_word);
+		wordButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent intent=new Intent(DidaActivity.this,WordsBookActivity.class);
+				startActivity(intent);
+				
+			}
+		});
 		context = this;
 		editText=(EditText)findViewById(R.id.edit_search);
 		btn_search=(Button)findViewById(R.id.btn_search);
@@ -92,10 +105,25 @@ public class DidaActivity extends Activity {
 					Toast.makeText(DidaActivity.this, "请输入不为空的单词！", Toast.LENGTH_SHORT).show();
 				}else {
 					//数据库操作
-					SQLiteDatabase db=myDatabaseHelper.getWritableDatabase();
+					// 数据库
+					SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+					Cursor c = db.query("Word", null, null, null, null, null, null);
+					listdata = new ArrayList<String>();
+					// 获取表的内容
+					while (c.moveToNext()) {
+
+						listdata.add(0, c.getString(c.getColumnIndex("name")));
+
+						String name = c.getString(c.getColumnIndex("name"));
+						Log.d("11111111", name);
+					}
+					if(!listdata.contains(string)){
+
+					//SQLiteDatabase db=myDatabaseHelper.getWritableDatabase();
 					ContentValues contentValues=new ContentValues();
 					contentValues.put("name",string);
 					db.insert("Word", null, contentValues);
+					}
 					mProgressDialog.show();
 					String requestUrl = getRequestUrl(string);
 					stringRequest = new StringRequest(requestUrl,

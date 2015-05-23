@@ -14,13 +14,13 @@
         android:orientation="horizontal" >
 
         <ImageButton
-            android:id="@+id/btn_voice"
+            android:id="@+id/btn_word"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="3dip"
             android:layout_marginRight="3dip"
-            android:background="@drawable/voice" >
+            android:background="@drawable/menu_book" >
         </ImageButton>
 
         <EditText

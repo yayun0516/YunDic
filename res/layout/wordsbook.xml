@@ -3,18 +3,31 @@
     android:id="@+id/re_layout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 
-   
-    <Button 
-        android:id="@+id/shuaxin"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="刷新生词本"
-        />
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清空生词本" />
+
+        <Button
+            android:id="@+id/shuaxin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="刷新生词本" />
+    </LinearLayout>
+
     <ListView
         android:id="@+id/listview_words"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
     </ListView>
 
