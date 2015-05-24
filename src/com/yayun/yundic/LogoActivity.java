@@ -1,4 +1,6 @@
-package cn.com.karl.dida;
+package com.yayun.yundic;
+
+import com.yayun.yundic.R;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package cn.com.karl.dida;
+package com.yayun.yundic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,8 +9,8 @@ import org.lxh.demo.MoreActivity;
 import org.lxh.demo.TestActivity;
 
 import com.yayun.demo.MyDatabaseHelper;
+import com.yayun.yundic.R;
 
-import cn.com.karl.dida.R;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.database.Cursor;

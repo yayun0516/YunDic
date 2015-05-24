@@ -1,4 +1,4 @@
-package cn.com.karl.dida;
+package com.yayun.yundic;
 
 import java.util.List;
 
@@ -25,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.yayun.yundic.R;
 
 public class WordShow extends Activity {
 	private TextView textView;

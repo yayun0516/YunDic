@@ -1,4 +1,4 @@
-package cn.com.karl.dida;
+package com.yayun.yundic;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.yayun.yundic.R;
 
 import android.R.integer;
 import android.app.Activity;

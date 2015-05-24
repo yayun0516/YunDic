@@ -1,6 +1,7 @@
 package org.lxh.demo;
 
-import cn.com.karl.dida.R;
+import com.yayun.yundic.R;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

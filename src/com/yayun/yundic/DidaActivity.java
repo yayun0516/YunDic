@@ -1,4 +1,4 @@
-package cn.com.karl.dida;
+package com.yayun.yundic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.com.karl.dida.R.id;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -42,6 +41,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.yayun.demo.MyDatabaseHelper;
+import com.yayun.yundic.R;
+import com.yayun.yundic.R.id;
 
 public class DidaActivity extends Activity {
 

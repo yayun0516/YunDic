@@ -1,10 +1,11 @@
-package cn.com.karl.dida;
+package com.yayun.yundic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import com.yayun.demo.MyDatabaseHelper;
+import com.yayun.yundic.R;
 
 import android.R.anim;
 import android.app.Activity;
