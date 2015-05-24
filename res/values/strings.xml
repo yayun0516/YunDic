@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>		
-    <string name="hello">滴答词典</string>
-    <string name="app_name">滴答词典</string>  	
+    <string name="hello">云词典</string>
+    <string name="app_name">云词典</string>  	
  	<!-- 在线词典API -->
  	<string name="hcApi">http://api.dict.cn/ws.php?utf8=true&amp;q=</string>
  	<string name="acbApi">http://dict-co.iciba.com/api/dictionary.php?w=</string>
@@ -10,7 +10,7 @@
 	<string name="tran">翻译</string>    
 	<string name="clear">清空</string> 
 	 <string name="tips">提示</string>
-    <string name="quit_confirmation">退出海词词典?</string>
+    <string name="quit_confirmation">退出云词典?</string>
     <string name="update_content">更新简介</string>
     <string name="system_update_tip">发现新版本，请更新！</string>
     <string name="download_cancel">取消下载</string>
