@@ -44,6 +44,39 @@ public class WordsBookActivity extends Activity {
 		btnButton = (Button) findViewById(R.id.delete);
 		tbnshuaxin = (Button) findViewById(R.id.shuaxin);
 		listView = (ListView) findViewById(R.id.listview_words);
+
+		
+		
+		myDatabaseHelper = new MyDatabaseHelper(WordsBookActivity.this,
+				"Words.db", null, 1);
+		// 数据库
+		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+		Cursor c = db.query("Word", null, null, null, null, null, null);
+		listdata = new ArrayList<String>();
+		// 获取表的内容
+		while (c.moveToNext()) {
+
+			listdata.add(0, c.getString(c.getColumnIndex("name")));
+
+			String name = c.getString(c.getColumnIndex("name"));
+			Log.d("11111111", name);
+		}
+
+		/*int size = listdata.size();
+		Log.d("listdata", listdata.toString());
+		String[] array = new String[size];
+		for (int i = 0; i < listdata.size(); i++) {
+			array[i] = (String) listdata.get(i);
+		}
+*/
+		listView.setAdapter(new ArrayAdapter<String>(
+				WordsBookActivity.this,
+				android.R.layout.simple_expandable_list_item_1, listdata));
+		
+		
+		
+		
+		
 		btnButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
