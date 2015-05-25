@@ -69,7 +69,7 @@ public class MoreActivity extends Activity {
 				// TODO Auto-generated method stub
 				AlertDialog.Builder builder = new AlertDialog.Builder(MoreActivity.this);
 				builder.setTitle("关于");
-				builder.setMessage("滴答手机词典\n\n作者：Karl\n联系方式：995316358\n");
+				builder.setMessage("云词典\n\n作者：yayun\n联系方式：291214603\n");
 				AlertDialog alert = builder.create();
 				alert.show();
 			}

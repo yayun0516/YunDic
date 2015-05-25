@@ -162,7 +162,7 @@ public class WordsBookActivity extends Activity {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo acmiRef = (AdapterContextMenuInfo) item.getMenuInfo();
+		AdapterContextMenuInfo acmiRef = (AdapterContextMenuInfo) item.getMenuInfo();//用来获取item信息哎，重要
 		int removeIndex =acmiRef.position;
 		System.out.println(removeIndex);
 		System.out.println(WordsBookActivity.this.listdata.get(removeIndex));
@@ -171,7 +171,7 @@ public class WordsBookActivity extends Activity {
 			db = myDatabaseHelper.getWritableDatabase();
 			db.delete("Word", "name=?", new String[]{WordsBookActivity.this.listdata.get(removeIndex)});
 			listdata.remove(removeIndex);
-			adapter.notifyDataSetChanged();
+			adapter.notifyDataSetChanged();//删除后刷新ListView
 
 			break;
 		case 2:

@@ -29,6 +29,10 @@
         </activity>
         <activity android:name="org.lxh.demo.MoreActivity" >
         </activity>
+       <activity android:name="org.lxh.demo.RegisterActivity" >
+        </activity>
+        <activity android:name="org.lxh.demo.SendMailActivity" >
+        </activity>
         <activity android:name="com.yayun.yundic.DidaActivity"/>
         
          <activity android:name="com.yayun.yundic.RegisterActivity"/>

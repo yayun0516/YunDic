@@ -47,7 +47,7 @@ public class SendMailActivity extends Activity {
 				Intent mailIntent=new Intent(android.content.Intent.ACTION_SEND);
 
 				mailIntent.setType("plain/test");
-				String[] strEmailReciver=new String[]{ "wangkuifeng0118@gmail.com" };
+				String[] strEmailReciver=new String[]{ "291214603@qq.com" };
 
 				String strEmailSubject=emailTitle.getText().toString();
 
