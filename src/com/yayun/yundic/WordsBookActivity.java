@@ -18,11 +18,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -33,10 +39,11 @@ public class WordsBookActivity extends Activity {
 	private ListView listView;
 	private MyDatabaseHelper myDatabaseHelper;
 
-	SimpleAdapter simpleAdapter;
+	//SimpleAdapter simpleAdapter;
 	private Button btnButton, tbnshuaxin;
 	List<String> listdata;
-
+	SQLiteDatabase db;
+	ArrayAdapter  adapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,13 +51,12 @@ public class WordsBookActivity extends Activity {
 		btnButton = (Button) findViewById(R.id.delete);
 		tbnshuaxin = (Button) findViewById(R.id.shuaxin);
 		listView = (ListView) findViewById(R.id.listview_words);
+		super.registerForContextMenu(this.listView);// 注册上下文菜单
 
-		
-		
 		myDatabaseHelper = new MyDatabaseHelper(WordsBookActivity.this,
 				"Words.db", null, 1);
 		// 数据库
-		SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+		 db = myDatabaseHelper.getWritableDatabase();
 		Cursor c = db.query("Word", null, null, null, null, null, null);
 		listdata = new ArrayList<String>();
 		// 获取表的内容
@@ -61,22 +67,10 @@ public class WordsBookActivity extends Activity {
 			String name = c.getString(c.getColumnIndex("name"));
 			Log.d("11111111", name);
 		}
+		adapter=new ArrayAdapter<String>(WordsBookActivity.this,
+				android.R.layout.simple_expandable_list_item_1, listdata);
+		listView.setAdapter(adapter);
 
-		/*int size = listdata.size();
-		Log.d("listdata", listdata.toString());
-		String[] array = new String[size];
-		for (int i = 0; i < listdata.size(); i++) {
-			array[i] = (String) listdata.get(i);
-		}
-*/
-		listView.setAdapter(new ArrayAdapter<String>(
-				WordsBookActivity.this,
-				android.R.layout.simple_expandable_list_item_1, listdata));
-		
-		
-		
-		
-		
 		btnButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -126,17 +120,10 @@ public class WordsBookActivity extends Activity {
 					Log.d("11111111", name);
 				}
 
-				/*int size = listdata.size();
-				Log.d("listdata", listdata.toString());
-				String[] array = new String[size];
-				for (int i = 0; i < listdata.size(); i++) {
-					array[i] = (String) listdata.get(i);
-				}
-*/
 				listView.setAdapter(new ArrayAdapter<String>(
 						WordsBookActivity.this,
-						android.R.layout.simple_expandable_list_item_1, listdata));
-				
+						android.R.layout.simple_expandable_list_item_1,
+						listdata));
 
 			}
 		});
@@ -144,16 +131,56 @@ public class WordsBookActivity extends Activity {
 
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Intent intent=new Intent(WordsBookActivity.this,WordShow.class);
-				
-				String word=listdata.get(position);
+				Intent intent = new Intent(WordsBookActivity.this,
+						WordShow.class);
+
+				String word = listdata.get(position);
 				Log.d("word1", word);
 				intent.putExtra("word", word);
 				startActivity(intent);
-				
+
+			}
+		});
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				return false;
 			}
 		});
 
 	}
 
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.add(0, 1, 1, "删除");
+		menu.add(0, 2, 1, "取消");
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo acmiRef = (AdapterContextMenuInfo) item.getMenuInfo();
+		int removeIndex =acmiRef.position;
+		System.out.println(removeIndex);
+		System.out.println(WordsBookActivity.this.listdata.get(removeIndex));
+		switch (item.getItemId()) {
+		case 1:
+			db = myDatabaseHelper.getWritableDatabase();
+			db.delete("Word", "name=?", new String[]{WordsBookActivity.this.listdata.get(removeIndex)});
+			listdata.remove(removeIndex);
+			adapter.notifyDataSetChanged();
+
+			break;
+		case 2:
+
+			break;
+
+		default:
+			break;
+		}
+		return super.onContextItemSelected(item);
+	}
 }
